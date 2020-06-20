@@ -21,4 +21,4 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 },{"../Effect.Console/index.js":"bpjQ"}],"Focm":[function(require,module,exports) {
 var n=require("./output/Main");function o(){n.main()}module.hot&&module.hot.accept(function(){console.log("Reloaded, running main again"),o()}),console.log("Starting app"),o();
 },{"./output/Main":"MrQo"}]},{},["Focm"], null)
-//# sourceMappingURL=/healpix-webviz.08fdf6f3.js.map
+//# sourceMappingURL=/healpix-webviz/healpix-webviz.08fdf6f3.js.map
