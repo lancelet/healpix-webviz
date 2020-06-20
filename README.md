@@ -2,6 +2,9 @@
 
 [![Node.js CI](https://github.com/lancelet/healpix-webviz/workflows/Node.js%20CI/badge.svg)](https://github.com/lancelet/healpix-webviz/actions)
 
+Link to [live version on GitHub
+pages](https://lancelet.github.io/healpix-webviz/index.html).
+
 Based on the [Getting Started with
 Parcel](https://github.com/purescript/spago#get-started-from-scratch-with-parcel-frontend-projects)
 guide from the spago documentation.
