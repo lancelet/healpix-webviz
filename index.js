@@ -1,3 +1,5 @@
+global.THREE = require('three');
+
 var Main = require('./output/Main');
 
 function main() {
