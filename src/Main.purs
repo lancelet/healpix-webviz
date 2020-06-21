@@ -49,6 +49,8 @@ main = void $ Unsafe.unsafePartial do
   scene <- Scene.create
   camera <- Camera.createPerspective 75.0 aspect 0.1 1000.0
   controls <- newOrbitControls camera canvasElement
+  orbitDisableZoom controls
+  orbitDisablePan controls
 
   -- add a cube to the scene
   geometry <- Geometry.createBox 1.0 1.0 1.0
@@ -124,10 +126,22 @@ newOrbitControls =
     "new OrbitControls(camera, domElement)"
 
 orbitControlsUpdate :: OrbitControls -> Effect Unit
-orbitControlsUpdate oc =
+orbitControlsUpdate =
   ThreeUtil.fpi
     ["orbitControls", ""]
     "orbitControls.update()"
+
+orbitDisableZoom :: OrbitControls -> Effect Unit
+orbitDisableZoom =
+  ThreeUtil.fpi
+    ["orbitControls", ""]
+    "orbitControls.enableZoom = false"
+
+orbitDisablePan :: OrbitControls -> Effect Unit
+orbitDisablePan =
+  ThreeUtil.fpi
+    ["orbitControls", ""]
+    "orbitControls.enablePan = false"
 
 ------------------
 -- MeshLine FFI --
