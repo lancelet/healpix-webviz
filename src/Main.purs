@@ -16,7 +16,9 @@ import Graphics.Three.Renderer (Renderer)
 import Graphics.Three.Renderer as Renderer
 import Graphics.Three.Scene (Scene)
 import Graphics.Three.Scene as Scene
+import Graphics.Three.Util as ThreeUtil
 
+import Web.DOM (Element)
 import Web.DOM.NonElementParentNode as NonElementParentNode
 import Web.HTML as HTML
 import Web.HTML.HTMLDocument as HTMLDocument
@@ -36,10 +38,11 @@ main = void $ Unsafe.unsafePartial do
 
   let aspect = 1.0
 
-  renderer <- Renderer.createWebGL {antialias: true, canvas: canvasElement}
+  renderer <- Renderer.createWebGL {antialias: true, canvas: canvasElement, alpha: true}
   Renderer.setSize renderer 400.0 400.0
   scene <- Scene.create
   camera <- Camera.createPerspective 75.0 aspect 0.1 1000.0
+  controls <- newOrbitControls camera canvasElement
 
   geometry <- Geometry.createBox 1.0 1.0 1.0
   material <- Material.createMeshBasic {color: 0x00ff00}
@@ -47,6 +50,7 @@ main = void $ Unsafe.unsafePartial do
   Scene.addObject scene cube
 
   Object3D.setPosition camera 0.0 0.0 2.0
+  orbitControlsUpdate controls
 
   render window renderer scene camera
 
@@ -64,3 +68,21 @@ render window renderer scene camera = do
   void $ Window.requestAnimationFrame
     (render window renderer scene camera)
     window
+
+foreign import data OrbitControls :: Type
+
+newOrbitControls ::
+  forall cam. Camera cam
+  => cam
+  -> Element
+  -> Effect OrbitControls
+newOrbitControls =
+  ThreeUtil.ffi
+    ["camera", "domElement", ""]
+    "new OrbitControls(camera, domElement)"
+
+orbitControlsUpdate :: OrbitControls -> Effect Unit
+orbitControlsUpdate oc =
+  ThreeUtil.fpi
+    ["orbitControls", ""]
+    "orbitControls.update()"

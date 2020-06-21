@@ -1,5 +1,8 @@
 global.THREE = require('three');
 
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+global.OrbitControls = OrbitControls;
+
 var Main = require('./output/Main');
 
 function main() {
