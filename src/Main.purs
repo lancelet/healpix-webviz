@@ -60,18 +60,32 @@ main = void $ Unsafe.unsafePartial do
   let verts :: Array Vector3
       verts = do
         let radius = 1.0
-            nverts = 64
+            nverts = 128
         i <- 0 .. nverts
         let theta = (toNumber i) * 2.0 * pi / (toNumber nverts)
             x = radius * cos theta
             y = radius * sin theta
         pure $ Vector.createVec3 x y 0.0
+
+  -- solid circle
   lineGeom <- Geometry.create verts
   meshLineA <- createMeshLine lineGeom
   meshLine <- Object3D.getGeometry meshLineA
-  meshLineMat <- createMeshLineMaterial {color: 0x000000, lineWidth: 0.01, sizeAttenuation: false}
+  meshLineMat <- createMeshLineMaterial {color: 0x000000, lineWidth: 0.005, sizeAttenuation: false}
   lineMesh <- Object3D.createMesh meshLine meshLineMat
   Scene.addObject scene lineMesh
+
+  -- dashed circle
+  dashLineMat <- createMeshLineMaterial
+    { color: 0x000000
+    , lineWidth: 0.005
+    , sizeAttenuation: false
+    , dashArray: 0.015
+    , transparent: true
+    , depthFunc: 6 -- THREE.GreaterEqualDepth
+    }
+  dashLineMesh <- Object3D.createMesh meshLine dashLineMat
+  Scene.addObject scene dashLineMesh
 
   Object3D.setPosition camera 0.0 0.0 2.0
   orbitControlsUpdate controls
