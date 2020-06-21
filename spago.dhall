@@ -5,7 +5,9 @@ You can edit this file as you like.
 { name = "my-project"
 , dependencies =
   [ "console"
+  , "debug"
   , "effect"
+  , "math"
   , "psci-support"
   , "purescript-three"
   , "web-html"
