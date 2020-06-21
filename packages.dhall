@@ -123,6 +123,17 @@ let upstream =
 
 let overrides = {=}
 
-let additions = {=}
+let additions =
+  { purescript-easy-ffi =
+    { dependencies = [] : List Text
+    , repo = "https://github.com/pelotom/purescript-easy-ffi.git"
+    , version = "master"
+    },
+    purescript-three =
+    { dependencies = [ "purescript-easy-ffi", "web-dom" ]
+    , repo = "https://github.com/anthonyquizon/purescript-three.git"
+    , version = "master"
+    }
+  }
 
 in  upstream // overrides // additions
