@@ -1,7 +1,5 @@
 global.THREE = require('three');
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-global.OrbitControls = OrbitControls;
 global.MeshLine = require('three.meshline');
 
 var Main = require('./output/Main');

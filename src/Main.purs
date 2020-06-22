@@ -24,12 +24,13 @@ import Graphics.Three.Scene (Scene)
 import Graphics.Three.Scene as Scene
 import Graphics.Three.Util as ThreeUtil
 
-import Web.DOM (Element)
 import Web.DOM.NonElementParentNode as NonElementParentNode
 import Web.HTML as HTML
 import Web.HTML.HTMLDocument as HTMLDocument
 import Web.HTML.Window (Window)
 import Web.HTML.Window as Window
+
+import OrbitControls as OrbitControls
 
 main :: Effect Unit
 main = void $ Unsafe.unsafePartial do
@@ -48,9 +49,9 @@ main = void $ Unsafe.unsafePartial do
   Renderer.setSize renderer 400.0 400.0
   scene <- Scene.create
   camera <- Camera.createPerspective 75.0 aspect 0.1 1000.0
-  controls <- newOrbitControls camera canvasElement
-  orbitDisableZoom controls
-  orbitDisablePan controls
+  controls <- OrbitControls.create camera canvasElement
+  OrbitControls.setZoomEnabled controls false
+  OrbitControls.setPanEnabled controls false
 
   -- add a cube to the scene
   geometry <- Geometry.createBox 1.0 1.0 1.0
@@ -73,14 +74,14 @@ main = void $ Unsafe.unsafePartial do
   lineGeom <- Geometry.create verts
   meshLineA <- createMeshLine lineGeom
   meshLine <- Object3D.getGeometry meshLineA
-  meshLineMat <- createMeshLineMaterial {color: 0x000000, lineWidth: 0.005, sizeAttenuation: false}
+  meshLineMat <- createMeshLineMaterial {color: 0x000000, lineWidth: 0.003, sizeAttenuation: false}
   lineMesh <- Object3D.createMesh meshLine meshLineMat
   Scene.addObject scene lineMesh
 
   -- dashed circle
   dashLineMat <- createMeshLineMaterial
     { color: 0x000000
-    , lineWidth: 0.005
+    , lineWidth: 0.003
     , sizeAttenuation: false
     , dashArray: 0.015
     , transparent: true
@@ -90,7 +91,7 @@ main = void $ Unsafe.unsafePartial do
   Scene.addObject scene dashLineMesh
 
   Object3D.setPosition camera 0.0 0.0 2.0
-  orbitControlsUpdate controls
+  OrbitControls.update controls
 
   render window renderer scene camera
 
@@ -108,40 +109,6 @@ render window renderer scene camera = do
   void $ Window.requestAnimationFrame
     (render window renderer scene camera)
     window
-
-------------------------
--- Orbit Controls FFI --
-------------------------
-
-foreign import data OrbitControls :: Type
-
-newOrbitControls ::
-  forall cam. Camera cam
-  => cam
-  -> Element
-  -> Effect OrbitControls
-newOrbitControls =
-  ThreeUtil.ffi
-    ["camera", "domElement", ""]
-    "new OrbitControls(camera, domElement)"
-
-orbitControlsUpdate :: OrbitControls -> Effect Unit
-orbitControlsUpdate =
-  ThreeUtil.fpi
-    ["orbitControls", ""]
-    "orbitControls.update()"
-
-orbitDisableZoom :: OrbitControls -> Effect Unit
-orbitDisableZoom =
-  ThreeUtil.fpi
-    ["orbitControls", ""]
-    "orbitControls.enableZoom = false"
-
-orbitDisablePan :: OrbitControls -> Effect Unit
-orbitDisablePan =
-  ThreeUtil.fpi
-    ["orbitControls", ""]
-    "orbitControls.enablePan = false"
 
 ------------------
 -- MeshLine FFI --
