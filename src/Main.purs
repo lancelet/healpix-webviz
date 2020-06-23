@@ -73,18 +73,24 @@ main = void $ Unsafe.unsafePartial do
   lineGeom <- Geometry.create verts
   meshLineA <- MeshLine.create lineGeom
   meshLine <- Object3D.getGeometry meshLineA
-  meshLineMat <- MeshLine.createMaterial {color: 0x000000, lineWidth: 0.003, sizeAttenuation: false}
+  meshLineMat <- MeshLine.createMaterial
+    { color: 0x000000
+    , lineWidth: 2
+    , sizeAttenuation: false
+    , resolution: MeshLine.createVec2 400.0 400.0 -- TODO
+    }
   lineMesh <- Object3D.createMesh meshLine meshLineMat
   Scene.addObject scene lineMesh
 
   -- dashed circle
   dashLineMat <- MeshLine.createMaterial
     { color: 0x000000
-    , lineWidth: 0.003
+    , lineWidth: 2
     , sizeAttenuation: false
     , dashArray: 0.015
     , transparent: true
     , depthFunc: 6 -- THREE.GreaterEqualDepth
+    , resolution: MeshLine.createVec2 400.0 400.0 -- TODO
     }
   dashLineMesh <- Object3D.createMesh meshLine dashLineMat
   Scene.addObject scene dashLineMesh

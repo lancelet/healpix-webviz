@@ -7,6 +7,7 @@ import Effect (Effect)
 import Graphics.Three.Geometry (Geometry)
 import Graphics.Three.Material (class Material)
 import Graphics.Three.Object3D (class Renderable)
+import Graphics.Three.Math.Vector (Vector2)
 
 foreign import data MeshLine :: Type
 foreign import data MeshLineMaterial :: Type
@@ -25,3 +26,5 @@ create geometry = do
   pure meshlineInstance
 
 foreign import createMaterial :: forall opt. {|opt} -> Effect MeshLineMaterial
+
+foreign import createVec2 :: Number -> Number -> Vector2

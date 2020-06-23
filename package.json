@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "three": "^0.117.1",
-    "three.meshline": "^1.2.0"
+    "three.meshline": "^1.2.0",
+    "threejs-meshline": "^2.0.11"
   }
 }
