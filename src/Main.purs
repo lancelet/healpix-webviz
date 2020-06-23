@@ -13,7 +13,6 @@ import Partial.Unsafe as Unsafe
 import Graphics.Three.Camera (class Camera)
 import Graphics.Three.Camera as Camera
 import Graphics.Three.Geometry as Geometry
-import Graphics.Three.Geometry (Geometry)
 import Graphics.Three.Material as Material
 import Graphics.Three.Math.Vector as Vector
 import Graphics.Three.Math.Vector (Vector3)
@@ -22,7 +21,6 @@ import Graphics.Three.Renderer (Renderer)
 import Graphics.Three.Renderer as Renderer
 import Graphics.Three.Scene (Scene)
 import Graphics.Three.Scene as Scene
-import Graphics.Three.Util as ThreeUtil
 
 import Web.DOM.NonElementParentNode as NonElementParentNode
 import Web.HTML as HTML
@@ -30,6 +28,7 @@ import Web.HTML.HTMLDocument as HTMLDocument
 import Web.HTML.Window (Window)
 import Web.HTML.Window as Window
 
+import MeshLine as MeshLine
 import OrbitControls as OrbitControls
 
 main :: Effect Unit
@@ -72,14 +71,14 @@ main = void $ Unsafe.unsafePartial do
 
   -- solid circle
   lineGeom <- Geometry.create verts
-  meshLineA <- createMeshLine lineGeom
+  meshLineA <- MeshLine.create lineGeom
   meshLine <- Object3D.getGeometry meshLineA
-  meshLineMat <- createMeshLineMaterial {color: 0x000000, lineWidth: 0.003, sizeAttenuation: false}
+  meshLineMat <- MeshLine.createMaterial {color: 0x000000, lineWidth: 0.003, sizeAttenuation: false}
   lineMesh <- Object3D.createMesh meshLine meshLineMat
   Scene.addObject scene lineMesh
 
   -- dashed circle
-  dashLineMat <- createMeshLineMaterial
+  dashLineMat <- MeshLine.createMaterial
     { color: 0x000000
     , lineWidth: 0.003
     , sizeAttenuation: false
@@ -109,32 +108,3 @@ render window renderer scene camera = do
   void $ Window.requestAnimationFrame
     (render window renderer scene camera)
     window
-
-------------------
--- MeshLine FFI --
-------------------
-
-foreign import data MeshLine :: Type
-foreign import data MeshLineMaterial :: Type
-
-newMeshLine :: Effect MeshLine
-newMeshLine = ThreeUtil.ffi [""] "new MeshLine.MeshLine()"
-
-setMeshLineGeometry :: MeshLine -> Geometry -> Effect Unit
-setMeshLineGeometry =
-  ThreeUtil.fpi
-    ["meshline", "geom", ""]
-    "meshline.setGeometry(geom)"
-
-createMeshLine :: Geometry -> Effect MeshLine
-createMeshLine geom = do
-  meshline <- newMeshLine
-  setMeshLineGeometry meshline geom
-  pure meshline
-
-createMeshLineMaterial :: forall opt. {|opt} -> Effect MeshLineMaterial
-createMeshLineMaterial =
-  ThreeUtil.ffi ["param", ""] "new MeshLine.MeshLineMaterial(param)"
-
-instance materalMeshLine :: Material.Material MeshLineMaterial
-instance renderableMeshLine :: Object3D.Renderable MeshLine

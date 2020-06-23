@@ -1,6 +1,6 @@
 module OrbitControls where
 
-import Prelude
+import Prelude (Unit)
 
 import Effect (Effect)
 
