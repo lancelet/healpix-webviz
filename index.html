@@ -4,8 +4,11 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
-  <h1>HEALPix WebViz</h1>
-  <canvas id="exteriorSphere" width="400" height="400" style="outline: 0;"></canvas>
+  <h1 style="font-family: sans-serif;">HEALPix WebViz</h1>
+  <div id="canvas-stack" style="position: relative;">
+    <canvas id="exteriorSphere" width="800" height="800" style="outline: 0; position: absolute; top: 0; left:0;"></canvas>
+    <canvas id="exteriorSpherePane" width="800" height="800" style="outline: 0; position: absolute; top: 0; left:0; pointer-events: none;"></canvas>
+  </div>
   <script src="./index.js"></script>
 </body>
 </html>
